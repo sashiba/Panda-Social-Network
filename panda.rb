@@ -19,9 +19,16 @@ class Panda
   end
 
   def to_hash
+
   end
 
   def equal?(other)
     name == other.name && email == other.email && gender == other.gender
   end
+end
+
+class PandaSocialNetwork
+ 
+ 
+
 end
