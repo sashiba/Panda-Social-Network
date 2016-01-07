@@ -1,6 +1,14 @@
 class Panda
 
-  def initialize(name, email, gender)
+  attr_accessor :name, :email, :gender
 
+  def initialize(name, email, gender)
+    @name = name
+    @email = email
+    @gender = gender
   end
+
+
+
+
 end
