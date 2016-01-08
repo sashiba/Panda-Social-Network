@@ -34,6 +34,12 @@ class PandaSocialNetwork
     @network = []
   end
 
+  def add_panda(panda)
+  end
+
+  def has_panda(panda)
+  end
+
   def make_friends(panda1, panda2)
     raise "PandasAlreadyFriends" if are_friends(panda1, panda2)
 
@@ -44,11 +50,25 @@ class PandaSocialNetwork
     panda2.friends << panda1
   end
   
+  def are_friends(panda1, panda2)
+  end
+
   def friends_of(panda)
+    return false unless has_panda(panda)
+
     panda.friends
   end
 
+  def connection_level(panda1, panda2)
+  end
+
   def are_connected(panda1, panda2)
+    return false unless connection_level(panda1, panda2)
+    
+    connection_level(panda1, panda2) == -1 ? false : true
+  end
+
+  def how_many_gender_in_network(level, panda, gender)
   end
 
 end
