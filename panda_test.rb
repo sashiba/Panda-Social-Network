@@ -33,4 +33,11 @@ class PandaClass < Minitest::Test
 
     assert_equal false, ivo.female?
   end
+
+  def  test_panda_to_s
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    expected = "Name: Ivo, email: ivo@pandamail.com, gender: male"
+
+    assert_equal expected, ivo.to_s
+  end
 end
