@@ -30,14 +30,22 @@ end
 
 class PandaSocialNetwork
 
+  attr_accessor :network
+
   def initialize
     @network = []
   end
 
   def add_panda(panda)
+    raise "PandaAlreadyThere" if has_panda(panda)
+
+    network << panda
   end
 
   def has_panda(panda)
+    return true if network.find { |user| user.equal?(panda) }
+
+    false
   end
 
   def make_friends(panda1, panda2)
@@ -56,7 +64,7 @@ class PandaSocialNetwork
   def friends_of(panda)
     return false unless has_panda(panda)
 
-    panda.friends
+    panda.friends#to_s?
   end
 
   def connection_level(panda1, panda2)
@@ -69,6 +77,10 @@ class PandaSocialNetwork
   end
 
   def how_many_gender_in_network(level, panda, gender)
+  end
+
+  def size
+    network.size
   end
 
 end
