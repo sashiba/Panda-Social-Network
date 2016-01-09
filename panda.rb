@@ -10,11 +10,11 @@ class Panda
   end
 
   def male?
-    true if gender == 'male'
+    gender == 'male'
   end
 
   def female?
-    true if gender == 'female'
+    gender == 'female'
   end
 
   def to_s
@@ -65,13 +65,11 @@ class PandaSocialNetwork
     add_panda(panda2) unless has_panda(panda2)
 
     unless panda2.friends.include? panda1
+      panda2.friends << panda1
+    end    
+    unless panda1.friends.include? panda2
       panda1.friends << panda2
     end
-
-    unless panda1.friends.include? panda2
-      panda2.friends << panda1
-    end
-
   end
 
   def are_friends(panda1, panda2)
@@ -94,6 +92,10 @@ class PandaSocialNetwork
   end
 
   def how_many_gender_in_network(level, panda, gender)
+  end
+
+  def size
+    network.size
   end
 end
 
