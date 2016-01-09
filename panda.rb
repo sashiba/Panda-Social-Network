@@ -31,6 +31,11 @@ class Panda
     name == other.name and email == other.email and gender == other.gender
   end
 
+  def hash
+    to_s.hash
+  end
+
+  alias_method :eql?, :==
 end
 
 class PandaSocialNetwork
@@ -42,11 +47,9 @@ class PandaSocialNetwork
   end
 
   def add_panda(panda)
-    if network.include? panda
-      raise 'PandaAlreadyThere'
-    else
-      network[panda] = panda.friends
-    end
+    raise "PandaAlreadyThere" if has_panda(panda)
+
+    network[panda] = panda.friends
   end
 
   def has_panda(panda)
@@ -72,12 +75,13 @@ class PandaSocialNetwork
   end
 
   def are_friends(panda1, panda2)
+    panda1.friends.include?(panda2) && panda2.friends.include?(panda1)
   end
 
   def friends_of(panda)
     return false unless has_panda(panda)
 
-    panda.friends#to_s?
+    panda.friends
   end
 
   def connection_level(panda1, panda2)
