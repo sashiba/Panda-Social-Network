@@ -10,11 +10,11 @@ class Panda
   end
 
   def male?
-    true if gender == 'male'
+    gender == 'male'
   end
 
   def female?
-    true if gender == 'female'
+    gender == 'female'
   end
 
   def to_s
@@ -31,6 +31,11 @@ class Panda
     name == other.name and email == other.email and gender == other.gender
   end
 
+  def hash
+    to_s.hash
+  end
+
+  alias_method :eql?, :==
 end
 
 class PandaSocialNetwork
@@ -42,11 +47,9 @@ class PandaSocialNetwork
   end
 
   def add_panda(panda)
-    if network.include? panda
-      raise 'PandaAlreadyThere'
-    else
-      network[panda] = panda.friends
-    end
+    raise "PandaAlreadyThere" if has_panda(panda)
+
+    network[panda] = panda.friends
   end
 
   def has_panda(panda)
@@ -62,30 +65,28 @@ class PandaSocialNetwork
     add_panda(panda2) unless has_panda(panda2)
 
     unless panda2.friends.include? panda1
-      panda1.friends << panda2
-    end
-
-    unless panda1.friends.include? panda2
       panda2.friends << panda1
     end
-
+    unless panda1.friends.include? panda2
+      panda1.friends << panda2
+    end
   end
 
   def are_friends(panda1, panda2)
+    panda1.friends.include?(panda2) && panda2.friends.include?(panda1)
   end
 
   def friends_of(panda)
     return false unless has_panda(panda)
 
-    panda.friends#to_s?
+    panda.friends
   end
 
   def connection_level(panda1, panda2)
-    bfs(network, panda1)
   end
 
-  def bfs(network, starting_panda)
-    queue = [starting_panda]
+  def bfs(network, starting_id)
+    queue = [starting_id]
     result = []
 
     while !queue.empty?
@@ -98,8 +99,6 @@ class PandaSocialNetwork
         end
       end
     end
-
-    puts result
   end
 
   def are_connected(panda1, panda2)
@@ -110,6 +109,10 @@ class PandaSocialNetwork
 
   def how_many_gender_in_network(level, panda, gender)
   end
+
+  def size
+    network.size
+  end
 end
 
 network = PandaSocialNetwork.new
@@ -117,10 +120,6 @@ ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
 rado = Panda.new("Rado", "rado@pandamail.com", "male")
 sasho = Panda.new("Sasho", "sasho@gmail.com", "male")
 mila = Panda.new("Mila", "msruseva@gmail.com", "female")
-niki = Panda.new("Niki", "n1ka@gmail.com", "male")
 
-network.make_friends(ivo, rado)
-network.make_friends(ivo, mila)
-network.make_friends(rado, sasho)
-network.make_friends(rado, niki)
-bfs(network, ivo)
+
+p ivo.to_proc
