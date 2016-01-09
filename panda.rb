@@ -81,6 +81,25 @@ class PandaSocialNetwork
   end
 
   def connection_level(panda1, panda2)
+    bfs(network, panda1)
+  end
+
+  def bfs(network, starting_panda)
+    queue = [starting_panda]
+    result = []
+
+    while !queue.empty?
+      current_panda = queue.shift
+
+      unless result.include? current_panda
+        result << current_panda
+        current_panda.friends.each do |current_friend|
+          queue << current_friend
+        end
+      end
+    end
+
+    puts result
   end
 
   def are_connected(panda1, panda2)
@@ -93,29 +112,15 @@ class PandaSocialNetwork
   end
 end
 
-def bfs(network, starting_id)
-    queue = [starting_id]
-    result = []
-
-    while !queue.empty?
-      current_id = queue.shift
-
-      unless result.include? current_id
-        result << current_id
-        current_id.friends.each do |current_friend|
-          queue << current_friend
-        end
-      end
-    end
-
-    result
-  end
-
 network = PandaSocialNetwork.new
 ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
 rado = Panda.new("Rado", "rado@pandamail.com", "male")
 sasho = Panda.new("Sasho", "sasho@gmail.com", "male")
 mila = Panda.new("Mila", "msruseva@gmail.com", "female")
+niki = Panda.new("Niki", "n1ka@gmail.com", "male")
 
-
-p ivo.to_proc
+network.make_friends(ivo, rado)
+network.make_friends(ivo, mila)
+network.make_friends(rado, sasho)
+network.make_friends(rado, niki)
+bfs(network, ivo)
