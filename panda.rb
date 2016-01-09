@@ -83,13 +83,20 @@ class PandaSocialNetwork
   end
 
   def connection_level(panda1, panda2)
+    return false unless has_panda(panda1) or has_panda(panda2)
+    levels = bfs(network, panda1, panda2).size
+
+    return -1 if levels == 0
+
+    levels
   end
 
-  def bfs(network, starting_id)
-    queue = [starting_id]
-    result = []
+  def bfs(network, panda1, panda2)
+    queue = [panda1]
+    visited = []
 
-    while !queue.empty?
+
+    while !queue.empty? or current_panda != panda2
       current_panda = queue.shift
 
       unless result.include? current_panda
@@ -99,6 +106,14 @@ class PandaSocialNetwork
         end
       end
     end
+
+    if queue.empty?
+      visited == []
+    else
+      visited << panda2
+    end
+
+    visited
   end
 
   def are_connected(panda1, panda2)
