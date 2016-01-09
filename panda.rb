@@ -66,7 +66,7 @@ class PandaSocialNetwork
 
     unless panda2.friends.include? panda1
       panda2.friends << panda1
-    end    
+    end
     unless panda1.friends.include? panda2
       panda1.friends << panda2
     end
@@ -85,6 +85,22 @@ class PandaSocialNetwork
   def connection_level(panda1, panda2)
   end
 
+  def bfs(network, starting_id)
+    queue = [starting_id]
+    result = []
+
+    while !queue.empty?
+      current_panda = queue.shift
+
+      unless result.include? current_panda
+        result << current_panda
+        current_panda.friends.each do |current_friend|
+          queue << current_friend
+        end
+      end
+    end
+  end
+
   def are_connected(panda1, panda2)
     return false unless connection_level(panda1, panda2)
 
@@ -98,24 +114,6 @@ class PandaSocialNetwork
     network.size
   end
 end
-
-def bfs(network, starting_id)
-    queue = [starting_id]
-    result = []
-
-    while !queue.empty?
-      current_id = queue.shift
-
-      unless result.include? current_id
-        result << current_id
-        current_id.friends.each do |current_friend|
-          queue << current_friend
-        end
-      end
-    end
-
-    result
-  end
 
 network = PandaSocialNetwork.new
 ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
