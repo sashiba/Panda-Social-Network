@@ -9,12 +9,6 @@ class Panda
     @friends = []
   end
 
-  def to_proc
-    lambda do |x, *args|
-      x.public_send self, *args
-    end
-  end
-
   def male?
     true if gender == 'male'
   end
@@ -27,13 +21,13 @@ class Panda
     "Name: #{name}, Email: #{email}, Gender: #{gender}"
   end
 
-  def to_h
-    hash, key, value = {}, self.to_proc, [self.name, self.email, self.gender]
-    hash[key] = value
-    hash
+  def to_proc
+    lambda do |x, *args|
+      x.public_send self, *args
+    end
   end
 
-  def equal?(other)
+  def ==(other)
     name == other.name and email == other.email and gender == other.gender
   end
 
@@ -41,38 +35,40 @@ end
 
 class PandaSocialNetwork
 
-  attr_accessor :network, :friends
+  attr_accessor :network
 
   def initialize
-    @network = []
-    @freidns = {}
+    @network = {}
   end
 
   def add_panda(panda)
-    if network.include? panda.to_proc
+    if network.include? panda
       raise 'PandaAlreadyThere'
     else
-      network << [panda.to_proc, panda.name, panda.email, panda.gender]
+      network[panda] = panda.friends
     end
   end
 
   def has_panda(panda)
-    return true if network.find { |user| user.equal?(panda) }
+    return true if network.key? panda
 
     false
   end
 
   def make_friends(panda1, panda2)
-    #raise "PandasAlreadyFriends" if are_friends(panda1, panda2)
+    raise "PandasAlreadyFriends" if are_friends(panda1, panda2)
+
     add_panda(panda1) unless has_panda(panda1)
     add_panda(panda2) unless has_panda(panda2)
 
-    unless friends[]
-      panda1.friends << panda2.to_h
-      panda2.friends << panda1.to_h
+    unless panda2.friends.include? panda1
+      panda1.friends << panda2
     end
 
-    p panda1.friends
+    unless panda1.friends.include? panda2
+      panda2.friends << panda1
+    end
+
   end
 
   def are_friends(panda1, panda2)
@@ -122,4 +118,4 @@ sasho = Panda.new("Sasho", "sasho@gmail.com", "male")
 mila = Panda.new("Mila", "msruseva@gmail.com", "female")
 
 
-p ivo.to_h
+p ivo.to_proc
