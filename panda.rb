@@ -83,34 +83,28 @@ class PandaSocialNetwork
   end
 
   def connection_level(panda1, panda2)
+
     return false unless has_panda(panda1) or has_panda(panda2)
     levels = bfs(network, panda1, panda2).size
 
     return -1 if levels == 0
 
-    levels
+    p levels
   end
 
   def bfs(network, panda1, panda2)
     queue = [panda1]
     visited = []
 
-
-    while !queue.empty? or current_panda != panda2
+    while !queue.empty?
       current_panda = queue.shift
 
-      unless result.include? current_panda
-        result << current_panda
+      unless visited.include? current_panda
+        visited << current_panda
         current_panda.friends.each do |current_friend|
           queue << current_friend
         end
       end
-    end
-
-    if queue.empty?
-      visited == []
-    else
-      visited << panda2
     end
 
     visited
@@ -133,8 +127,17 @@ end
 network = PandaSocialNetwork.new
 ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
 rado = Panda.new("Rado", "rado@pandamail.com", "male")
-sasho = Panda.new("Sasho", "sasho@gmail.com", "male")
-mila = Panda.new("Mila", "msruseva@gmail.com", "female")
+tony = Panda.new("Tony", "tony@pandamail.com", "female")
+
+network.add_panda(ivo)
+network.add_panda(rado)
+network.add_panda(tony)
+
+network.make_friends(ivo, rado)
+network.make_friends(rado, tony)
 
 
-p ivo.to_proc
+p network.connection_level(ivo, rado) == 1 # true
+p network.connection_level(ivo, tony) == 2 # true
+
+#network.how_many_gender_in_network(1, rado, "female") == 1 # true
