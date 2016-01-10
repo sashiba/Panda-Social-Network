@@ -83,4 +83,139 @@ class SocialNetworkClass < Minitest::Test
     assert_equal 1, rado.friends.size
   end
 
+  def test__connection_level_1
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+
+    network.make_friends(ivo, rado)
+    network.connection_level(ivo, rado)
+    
+    assert_equal 1, network.connection_level(ivo, rado)
+  end
+
+  def test__connection_level_2
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+
+    network.make_friends(ivo, rado)
+    network.make_friends(rado, tony)
+    
+    assert_equal 2, network.connection_level(ivo, tony)
+  end
+
+  def test__connection_level_no_connection
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+
+    network.make_friends(rado, tony)
+    
+    assert_equal -1, network.connection_level(ivo, tony)
+  end
+
+  def test__connection_level_with_a_panda_not_in_network
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+
+    assert_equal false, network.connection_level(ivo, rado)
+  end
+
+  def test_are_friends_method
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.make_friends(ivo, rado)
+    
+    assert_equal true, network.are_friends(ivo, rado)
+  end
+
+  def test_are__not_friends_method
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    
+    assert_equal false, network.are_friends(ivo, rado)
+  end
+  
+  def test_are_connected
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.make_friends(ivo, rado)
+
+    assert_equal true, network.are_connected(ivo, rado)
+  end
+
+  def test_are_connected_between_friends
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+
+    network.make_friends(ivo, rado)
+    network.make_friends(rado, tony)
+
+    assert_equal true, network.are_connected(ivo, tony)
+  end
+  
+  def test_are_not_connected
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    
+    assert_equal false, network.are_friends(ivo, rado)
+  end
+  
+  def test_friends_of_panda_not_from_network
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(rado)
+    
+    #expected = "Name: Rado, Email: rado@pandamail.com, Gender: male"
+
+    assert_equal false, network.friends_of(ivo)
+  end
+
+  def test_friends_of_panda_in_network
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(rado)
+    network.add_panda(ivo)
+    network.make_friends(ivo, rado)
+    
+    expected = "Name: Rado, Email: rado@pandamail.com, Gender: male"
+
+    assert_equal expected, network.friends_of(ivo)[0].to_s
+  end
+  
+  def test_how_many_gender
+  end
 end
