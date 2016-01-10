@@ -83,37 +83,30 @@ class PandaSocialNetwork
   end
 
   def connection_level(panda1, panda2)
-    return false unless has_panda(panda1) or has_panda(panda2)
-    levels = bfs(network, panda1, panda2).size
-
-    return -1 if levels == 0
-
+    return false unless has_panda(panda1) and has_panda(panda2)
+    levels = bfs_1(panda1, panda2)
+    
     levels
   end
 
-  def bfs(network, panda1, panda2)
-    queue = [panda1]
+  def bfs_1(start_panda, wanted_panda)
+    q = Queue.new
     visited = []
+    q << [0, start_panda]
+    visited << start_panda
 
+    until q.empty?
+      level, current = q.pop
+      return level if wanted_panda == current
 
-    while !queue.empty? or current_panda != panda2
-      current_panda = queue.shift
-
-      unless result.include? current_panda
-        result << current_panda
-        current_panda.friends.each do |current_friend|
-          queue << current_friend
-        end
+      un = network[current].select { |v| !visited.include? v }
+      un.each do |v|
+        visited << v
+        q << [level + 1, v]
       end
     end
 
-    if queue.empty?
-      visited == []
-    else
-      visited << panda2
-    end
-
-    visited
+    -1
   end
 
   def are_connected(panda1, panda2)
@@ -122,19 +115,31 @@ class PandaSocialNetwork
     connection_level(panda1, panda2) == -1 ? false : true
   end
 
+  def bfs_gender_on_level(start_panda, search_level, gender)
+    q = Queue.new
+    visited, result = [], 0
+    q << [0, start_panda]
+    visited << start_panda
+
+    until q.empty?
+      level, current = q.pop
+      result += 1 if level == search_level and gender == current.gender
+
+      un = network[current].select { |v| !visited.include? v }
+      un.each do |v|
+        visited << v
+        q << [level + 1, v]
+      end
+    end
+
+    result
+  end
+
   def how_many_gender_in_network(level, panda, gender)
+    bfs_gender_on_level(panda, level, gender)
   end
 
   def size
     network.size
   end
 end
-
-network = PandaSocialNetwork.new
-ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
-rado = Panda.new("Rado", "rado@pandamail.com", "male")
-sasho = Panda.new("Sasho", "sasho@gmail.com", "male")
-mila = Panda.new("Mila", "msruseva@gmail.com", "female")
-
-
-p ivo.to_proc
