@@ -198,8 +198,6 @@ class SocialNetworkClass < Minitest::Test
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     network.add_panda(rado)
     
-    #expected = "Name: Rado, Email: rado@pandamail.com, Gender: male"
-
     assert_equal false, network.friends_of(ivo)
   end
 
@@ -215,7 +213,61 @@ class SocialNetworkClass < Minitest::Test
 
     assert_equal expected, network.friends_of(ivo)[0].to_s
   end
+
+  def test_how_many_gender_in_network
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    maria = Panda.new("Maria", "mmm@gmail.com", "female")
+    
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+    network.add_panda(maria)
+
+    network.make_friends(ivo, rado)
+    network.make_friends(rado, tony)
+    network.make_friends(rado, maria)
+
+    assert_equal 2, network.how_many_gender_in_network(1, rado, "female") 
+  end
+
+  def test_how_many_gender_in_network_level_2
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    maria = Panda.new("Maria", "mmm@gmail.com", "female")
+    
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+    network.add_panda(maria)
+
+    network.make_friends(ivo, rado)
+    network.make_friends(rado, tony)
+    network.make_friends(rado, maria)
+
+    assert_equal 2, network.how_many_gender_in_network(2, ivo, "female") 
+  end
   
-  def test_how_many_gender
+  def test_how_many_gender_in_network_0_females
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    tony = Panda.new("Tony", "tony@gmail.com", "female")
+    maria = Panda.new("Maria", "mmm@gmail.com", "female")
+    
+    network.add_panda(ivo)
+    network.add_panda(rado)
+    network.add_panda(tony)
+    network.add_panda(maria)
+
+    network.make_friends(ivo, rado)
+    network.make_friends(rado, tony)
+    network.make_friends(rado, maria)
+
+    assert_equal 0, network.how_many_gender_in_network(1, ivo, "female") 
   end
 end
