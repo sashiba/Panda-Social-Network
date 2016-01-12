@@ -92,7 +92,7 @@ class SocialNetworkClass < Minitest::Test
 
     network.make_friends(ivo, rado)
     network.connection_level(ivo, rado)
-    
+
     assert_equal 1, network.connection_level(ivo, rado)
   end
 
@@ -107,7 +107,7 @@ class SocialNetworkClass < Minitest::Test
 
     network.make_friends(ivo, rado)
     network.make_friends(rado, tony)
-    
+
     assert_equal 2, network.connection_level(ivo, tony)
   end
 
@@ -121,7 +121,7 @@ class SocialNetworkClass < Minitest::Test
     network.add_panda(tony)
 
     network.make_friends(rado, tony)
-    
+
     assert_equal -1, network.connection_level(ivo, tony)
   end
 
@@ -141,7 +141,7 @@ class SocialNetworkClass < Minitest::Test
     network.add_panda(ivo)
     network.add_panda(rado)
     network.make_friends(ivo, rado)
-    
+
     assert_equal true, network.are_friends(ivo, rado)
   end
 
@@ -151,10 +151,10 @@ class SocialNetworkClass < Minitest::Test
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     network.add_panda(ivo)
     network.add_panda(rado)
-    
+
     assert_equal false, network.are_friends(ivo, rado)
   end
-  
+
   def test_are_connected
     network = PandaSocialNetwork.new
     ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
@@ -171,7 +171,7 @@ class SocialNetworkClass < Minitest::Test
     ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     tony = Panda.new("Tony", "tony@gmail.com", "female")
-    
+
     network.add_panda(ivo)
     network.add_panda(rado)
     network.add_panda(tony)
@@ -181,23 +181,23 @@ class SocialNetworkClass < Minitest::Test
 
     assert_equal true, network.are_connected(ivo, tony)
   end
-  
+
   def test_are_not_connected
     network = PandaSocialNetwork.new
     ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     network.add_panda(ivo)
     network.add_panda(rado)
-    
+
     assert_equal false, network.are_friends(ivo, rado)
   end
-  
+
   def test_friends_of_panda_not_from_network
     network = PandaSocialNetwork.new
     ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     network.add_panda(rado)
-    
+
     assert_equal false, network.friends_of(ivo)
   end
 
@@ -208,7 +208,7 @@ class SocialNetworkClass < Minitest::Test
     network.add_panda(rado)
     network.add_panda(ivo)
     network.make_friends(ivo, rado)
-    
+
     expected = "Name: Rado, Email: rado@pandamail.com, Gender: male"
 
     assert_equal expected, network.friends_of(ivo)[0].to_s
@@ -220,7 +220,7 @@ class SocialNetworkClass < Minitest::Test
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     tony = Panda.new("Tony", "tony@gmail.com", "female")
     maria = Panda.new("Maria", "mmm@gmail.com", "female")
-    
+
     network.add_panda(ivo)
     network.add_panda(rado)
     network.add_panda(tony)
@@ -230,7 +230,7 @@ class SocialNetworkClass < Minitest::Test
     network.make_friends(rado, tony)
     network.make_friends(rado, maria)
 
-    assert_equal 2, network.how_many_gender_in_network(1, rado, "female") 
+    assert_equal 2, network.how_many_gender_in_network(1, rado, "female")
   end
 
   def test_how_many_gender_in_network_level_2
@@ -239,7 +239,7 @@ class SocialNetworkClass < Minitest::Test
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     tony = Panda.new("Tony", "tony@gmail.com", "female")
     maria = Panda.new("Maria", "mmm@gmail.com", "female")
-    
+
     network.add_panda(ivo)
     network.add_panda(rado)
     network.add_panda(tony)
@@ -249,16 +249,16 @@ class SocialNetworkClass < Minitest::Test
     network.make_friends(rado, tony)
     network.make_friends(rado, maria)
 
-    assert_equal 2, network.how_many_gender_in_network(2, ivo, "female") 
+    assert_equal 2, network.how_many_gender_in_network(2, ivo, "female")
   end
-  
+
   def test_how_many_gender_in_network_0_females
     network = PandaSocialNetwork.new
     ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
     rado = Panda.new("Rado", "rado@pandamail.com", "male")
     tony = Panda.new("Tony", "tony@gmail.com", "female")
     maria = Panda.new("Maria", "mmm@gmail.com", "female")
-    
+
     network.add_panda(ivo)
     network.add_panda(rado)
     network.add_panda(tony)
@@ -268,6 +268,6 @@ class SocialNetworkClass < Minitest::Test
     network.make_friends(rado, tony)
     network.make_friends(rado, maria)
 
-    assert_equal 0, network.how_many_gender_in_network(1, ivo, "female") 
+    assert_equal 0, network.how_many_gender_in_network(1, ivo, "female")
   end
 end
