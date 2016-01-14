@@ -1,5 +1,5 @@
-class Panda
 
+class Panda
   attr_accessor :name, :email, :gender, :friends
 
   def initialize(name, email, gender)
@@ -39,7 +39,6 @@ class Panda
 end
 
 class PandaSocialNetwork
-
   attr_accessor :network
 
   def initialize
@@ -64,12 +63,8 @@ class PandaSocialNetwork
     add_panda(panda1) unless has_panda(panda1)
     add_panda(panda2) unless has_panda(panda2)
 
-    unless panda2.friends.include? panda1
-      panda2.friends << panda1
-    end
-    unless panda1.friends.include? panda2
-      panda1.friends << panda2
-    end
+    panda2.friends << panda1 unless panda2.friends.include? panda1
+    panda1.friends << panda2 unless panda1.friends.include? panda2
   end
 
   def are_friends(panda1, panda2)
@@ -85,7 +80,7 @@ class PandaSocialNetwork
   def connection_level(panda1, panda2)
     return false unless has_panda(panda1) and has_panda(panda2)
     levels = bfs_1(panda1, panda2)
-    
+
     levels
   end
 
@@ -141,5 +136,13 @@ class PandaSocialNetwork
 
   def size
     network.size
+  end
+
+  def save(file_name)
+    File.open("#{file_name}.psn", 'w+') { |f| Marshal.dump(self, f) }
+  end
+
+  def load(file_name)
+    File.open("#{file_name}.psn", 'r') { |f| Marshal.load(f) }
   end
 end
