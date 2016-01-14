@@ -270,4 +270,17 @@ class SocialNetworkClass < Minitest::Test
 
     assert_equal 0, network.how_many_gender_in_network(1, ivo, "female")
   end
+
+  def test_save_network_to_file
+    network = PandaSocialNetwork.new
+    ivo = Panda.new("Ivo", "ivo@pandamail.com", "male")
+    rado = Panda.new("Rado", "rado@pandamail.com", "male")
+    network.add_panda(rado)
+    network.add_panda(ivo)
+    network.make_friends(ivo, rado)
+
+    network.save('network4')
+    net = network.load('network4')
+    #assert_equal expected, network.friends_of(ivo)[0].to_s
+  end
 end
