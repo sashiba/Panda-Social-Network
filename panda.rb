@@ -164,16 +164,34 @@ module PandaSocialNetwork
     end
 
     def to_json
-      { 'network' => @network.each { |panda| panda } }
+      pandas_array = []
+      @network.each do |panda, _|
+        p panda
+        pandas_array << {
+          name: panda.name, email: panda.email,
+          gender: panda.gender, friends: panda.friends
+        }
+      end
+      { network: @network, pandas: pandas_array }
     end
 
     def json_create(network_json)
       @network = network_json['network']
     end
 
+    def json_load(file_name)
+      result = ''
+      File.open(file_name, 'r') do |file|
+        file.each_line { |line| result << line }
+      end
+
+      JSON.load result
+    end
+
     def save_json(file_name)
-      # PandaSocialNetwork.new
-      # a.json_create network.to_json
+      File.open("#{file_name}.json", 'w+') do |file|
+        file << (JSON.dump network.to_json)
+      end
     end
 
     def to_yaml
