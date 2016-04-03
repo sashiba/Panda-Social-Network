@@ -1,3 +1,4 @@
+
 class Panda
 
   attr_accessor :name, :email, :gender, :friends
@@ -85,7 +86,7 @@ class PandaSocialNetwork
   def connection_level(panda1, panda2)
     return false unless has_panda(panda1) and has_panda(panda2)
     levels = bfs_1(panda1, panda2)
-    
+
     levels
   end
 
